@@ -16,28 +16,52 @@
       'type': 'text'
     });
 
+    // Keep track of the text input to store the comma separated values
+    var backing = this;
+
     function split() {
-      // Split contents of textbox into a tag element
-      if (input.val() == '') {
+      var value = input.val();
+
+      // If empty don't create a tag
+      if (value == '') {
         return;
       }
+
+      // Build and add the tag span
       var tag =  $('<span/>', {
         'class': 'tag',
-        'text': input.val()
+        'text': value
       });
       var close = $('<a/>', {
         'text': 'x',
         'href': '#'
       });
-      close.click(remove);
+      close.click(function() {
+        remove(tag);
+      });
       tag.append(close);
       input.before(tag);
+
+      // Reset the textbox
       input.val('');
+
+      // Add the text to the backing textbox
+      backing.val(function(i, val) { 
+        return val + (val ? ',' : '') + value;
+      });
     }
 
-    function remove() {
-      $(this).parent().remove();
+    function remove(tag) {
+      // Remove the tag from the DOM
+      tag.find('a').remove();
+      var value = tag.text();
+      tag.remove();
       input.focus();
+
+      // Remove the text from the backing textbox
+      var tags = backing.val().split(',');
+      tags.splice(tags.indexOf(value), 1);
+      backing.val(tags.join(','));
     }
 
     input.focusout(function(e) {
@@ -51,7 +75,7 @@
       }
       if (REMOVE_ON.indexOf(e.which) != -1) {
         if (input.val() == '') {
-          input.prev().remove();
+          remove(input.prev());
           return false;
         }
       }
