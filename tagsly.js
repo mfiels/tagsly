@@ -13,7 +13,12 @@
 
     // Create the textbox
     var input = $('<input/>', {
-      'type': 'text'
+      'type': 'text',
+      'class': 'tag-textbox'
+    });
+
+    var suggest = $('<ul/>', {
+      'class': 'suggest'
     });
 
     // Keep track of the text input to store the comma separated values
@@ -49,6 +54,8 @@
       backing.val(function(i, val) { 
         return val + (val ? ',' : '') + value;
       });
+
+      suggest.offset({ left: input.offset().left });
     }
 
     function remove(tag) {
@@ -62,6 +69,8 @@
       var tags = backing.val().split(',');
       tags.splice(tags.indexOf(value), 1);
       backing.val(tags.join(','));
+
+      suggest.offset({ left: input.offset().left });
     }
 
     input.focusout(function(e) {
@@ -79,11 +88,48 @@
           return false;
         }
       }
+      if (e.which == 38) {
+        // Up arrow key
+        var active = suggest.find('li.active');
+        var activate;
+        if (active.length > 0) {
+          activate = active.prev();
+          active.removeClass('active');
+        } else {
+          activate = suggest.children().last();
+        }
+        activate.addClass('active');
+        input.val(activate.text());
+        return false;
+      }
+      if (e.which == 40) {
+        // Down arrow key
+        var active = suggest.find('li.active');
+        var activate;
+        if (active.length > 0) {
+          activate = active.next();
+          active.removeClass('active');
+        } else {
+          activate = suggest.children().first();
+        }
+        activate.addClass('active');
+        input.val(activate.text());
+        return false;
+      }
     });
+
+    // Dummy suggest tags
+    var langs = ['Java', 'JavaScript', 'Ruby on Rails'];
+    for (var i = 0; i < langs.length; i++) {
+      suggest.append($('<li/>', {
+        'text': langs[i]
+      }));
+    }
 
     // Throw a wrapper around the targeted input and hide it
     this.wrap(wrapper);
     this.parent().append(input);
+    this.parent().append(suggest);
     this.parent().click(function() {
       input.focus();
     });
