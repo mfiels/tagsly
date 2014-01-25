@@ -11,10 +11,10 @@
   width: 100%;
   padding: 5px;
   overflow: auto;
+  overflow-x: hidden;
 }
 .tagsly span.tag {
-  display: block;
-  float: left;
+  display: inline-block;
   position: relative;
   padding: 5px 15px 5px 10px;
   margin-right: 5px;
@@ -32,8 +32,7 @@
   color: white;
 }
 .tagsly input[type=text] {
-  width: 100%;
-  float: left;
+  display: inline-block;
   padding-top: 5px;
   padding-bottom: 5px;
   margin-bottom: 2px;
@@ -43,5 +42,4 @@
   font-family: inherit;
   font-size: inherit;
   font-weight: inherit;
-  clear: right;
 }
