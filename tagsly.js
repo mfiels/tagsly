@@ -6,6 +6,11 @@
     // Remove the previous tag when backspace is pressed
     var REMOVE_ON = [8];
 
+    // Create the wrapper
+    var wrapper = $('<div/>', {
+      'class': 'tagsly'
+    });
+
     // Create the textbox
     var input = $('<input/>', {
       'type': 'text'
@@ -52,11 +57,10 @@
       }
     });
 
-    // Add the tagsly class to the parent
-    this.addClass('tagsly');
-
-    // Add the textbox to the parent
-    this.append(input);
+    // Throw a wrapper around the targeted input and hide it
+    this.wrap(wrapper);
+    this.parent().append(input);
+    this.hide();
 
     // For chaining
     return this;
