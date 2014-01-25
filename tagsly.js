@@ -60,6 +60,9 @@
     // Throw a wrapper around the targeted input and hide it
     this.wrap(wrapper);
     this.parent().append(input);
+    this.parent().click(function() {
+      input.focus();
+    });
     this.hide();
 
     // For chaining
