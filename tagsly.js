@@ -3,6 +3,8 @@
   $.fn.tagsly = function() {
     // Split tags when comma or space is pressed
     var SPLIT_ON = [13, 188];
+    // Remove the previous tag when backspace is pressed
+    var REMOVE_ON = [8];
 
     // Create the textbox
     var input = $('<input/>', {
@@ -30,6 +32,7 @@
 
     function remove() {
       $(this).parent().remove();
+      input.focus();
     }
 
     input.focusout(function(e) {
@@ -40,6 +43,12 @@
       if (SPLIT_ON.indexOf(e.which) != -1) {
         split();
         return false;
+      }
+      if (REMOVE_ON.indexOf(e.which) != -1) {
+        if (input.val() == '') {
+          input.prev().remove();
+          return false;
+        }
       }
     });
 
