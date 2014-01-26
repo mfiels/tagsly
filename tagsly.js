@@ -189,6 +189,9 @@
         suggestion.mousedown(function(e) {
           input.val($(this).text());
           split();
+          setTimeout(function() { 
+            input.focus(); 
+          }, 0);
         });
         suggest.append(suggestion);
       }
