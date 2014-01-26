@@ -22,7 +22,6 @@
     if (params && params['placeholder']) {
       placeholder = params['placeholder'];
     }
-    input.prop('placeholder', placeholder);
 
     // Create the wrapper
     var wrapper = $('<div/>', {
@@ -32,8 +31,9 @@
     // Create the textbox
     var input = $('<input/>', {
       'type': 'text',
-      'class': 'tag-textbox'
+      'class': 'tag-textbox',
     });
+    input.prop('placeholder', placeholder);
 
     var suggest = $('<ul/>', {
       'class': 'suggest'
@@ -59,11 +59,13 @@
       // Build and add the tag span
       var tag =  $('<span/>', {
         'class': 'tag',
-        'text': value
+        'text': value,
+        'tabindex': '-1'
       });
       var close = $('<a/>', {
         'text': 'x',
-        'href': '#'
+        'href': '#',
+        'tabindex': '-1'
       });
       close.click(function() {
         remove(tag);
@@ -122,6 +124,7 @@
 
     input.focusout(function(e) {
       split();
+      suggest.hide();
     });
 
     input.keydown(function(e) {
