@@ -22,6 +22,7 @@
     if (params && params['placeholder']) {
       placeholder = params['placeholder'];
     }
+    input.prop('placeholder', placeholder);
 
     // Create the wrapper
     var wrapper = $('<div/>', {
@@ -218,8 +219,6 @@
         split();
       }
     }
-
-    input.prop('placeholder', placeholder);
 
     // For chaining
     return this;
