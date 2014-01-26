@@ -97,6 +97,9 @@
 
       // Remove the text from the backing textbox
       var tags = backing.val().split(',');
+      tags = tags.map(function(e) {
+        return e.trim();
+      });
       tags.splice(tags.indexOf(value), 1);
       backing.val(tags.join(','));
 
@@ -208,6 +211,7 @@
 
     var initial = this.val();
     if (initial.length > 0) {
+      this.val('');
       initial = initial.split(',');
       for (var i = 0; i < initial.length; i++) {
         input.val(initial[i]);
