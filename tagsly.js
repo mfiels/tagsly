@@ -7,11 +7,21 @@
     var REMOVE_ON = [8];
 
     var suggestions;
-    if (params['suggestions']) {
+    if (params && params['suggestions']) {
       suggestions = params['suggestions'];
     }
-    var suggestOnFocus = params['suggestOnFocus'];
-    var maxItems = params['maxItems'];
+    
+    var suggestOnFocus = params && params['suggestOnFocus'];
+
+    var maxItems;
+    if (params && params['maxItems']) {
+      maxItems = params['maxItems'];
+    } 
+
+    var placeholder = '';
+    if (params && params['placeholder']) {
+      placeholder = params['placeholder'];
+    }
 
     // Create the wrapper
     var wrapper = $('<div/>', {
@@ -74,6 +84,7 @@
       items++;
       if (maxItems && items >= maxItems) {
         input.prop('disabled', true);
+        input.prop('placeholder', '');
       }
     }
 
@@ -95,6 +106,7 @@
       items--;
       if (maxItems && items < maxItems) {
         input.prop('disabled', false);
+        input.prop('placeholder', placeholder);
       }
     }
 
@@ -190,6 +202,17 @@
       input.focus();
     });
     this.hide();
+
+    var initial = this.val();
+    if (initial.length > 0) {
+      initial = initial.split(',');
+      for (var i = 0; i < initial.length; i++) {
+        input.val(initial[i]);
+        split();
+      }
+    }
+
+    input.prop('placeholder', placeholder);
 
     // For chaining
     return this;
