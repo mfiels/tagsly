@@ -1,10 +1,17 @@
 (function($) {
 
-  $.fn.tagsly = function() {
+  $.fn.tagsly = function(params) {
     // Split tags when comma or space is pressed
     var SPLIT_ON = [13, 188];
     // Remove the previous tag when backspace is pressed
     var REMOVE_ON = [8];
+
+    var suggestions;
+    if (params['suggestions']) {
+      suggestions = params['suggestions'];
+    }
+    var suggestOnFocus = params['suggestOnFocus'];
+    var maxItems = params['maxItems'];
 
     // Create the wrapper
     var wrapper = $('<div/>', {
@@ -24,11 +31,17 @@
     // Keep track of the text input to store the comma separated values
     var backing = this;
 
+    var items = 0;
+
     function split() {
       var value = input.val();
 
       // If empty don't create a tag
       if (value == '') {
+        return;
+      }
+
+      if (maxItems && items >= maxItems) {
         return;
       }
 
@@ -55,7 +68,13 @@
         return val + (val ? ',' : '') + value;
       });
 
+      suggest.hide();
       suggest.offset({ left: input.offset().left });
+
+      items++;
+      if (maxItems && items >= maxItems) {
+        input.prop('disabled', true);
+      }
     }
 
     function remove(tag) {
@@ -70,8 +89,20 @@
       tags.splice(tags.indexOf(value), 1);
       backing.val(tags.join(','));
 
+      suggest.hide();
       suggest.offset({ left: input.offset().left });
+
+      items--;
+      if (maxItems && items < maxItems) {
+        input.prop('disabled', false);
+      }
     }
+
+    input.focus(function(e) {
+      if (suggestOnFocus) {
+        triggerSuggestionRequest();
+      }
+    });
 
     input.focusout(function(e) {
       split();
@@ -116,14 +147,39 @@
         input.val(activate.text());
         return false;
       }
+      if (e.which == 27) {
+        suggest.hide();
+      }
     });
 
-    // Dummy suggest tags
-    var langs = ['Java', 'JavaScript', 'Ruby on Rails'];
-    for (var i = 0; i < langs.length; i++) {
-      suggest.append($('<li/>', {
-        'text': langs[i]
-      }));
+    input.on('input', triggerSuggestionRequest);
+
+    var lastSuggestionAt = 0;
+    function triggerSuggestionRequest() {
+      if (suggestions) {
+        var now = new Date();
+        suggestions(input.val(), function(results) {
+          if (lastSuggestionAt < now) {
+            showSuggestions(results);
+            lastSuggestionAt = now;
+          }
+        });
+      }
+    }
+
+    function showSuggestions(items) {
+      suggest.show();
+      suggest.empty();
+      for (var i = 0; i < items.length; i++) {
+        var suggestion = $('<li/>', {
+          'text': items[i]
+        });
+        suggestion.click(function(e) {
+          input.val($(this).text());
+          split();
+        });
+        suggest.append(suggestion);
+      }
     }
 
     // Throw a wrapper around the targeted input and hide it

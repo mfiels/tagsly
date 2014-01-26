@@ -13,7 +13,13 @@
     <script src="tagsly.js"></script>
     <script>
       $(function() {
-        $('#tags').tagsly();
+        $('#tags').tagsly({
+          suggestions: function(input, cb) {
+            cb(['Idea', 'Alpha', 'Beta', 'Deployed']);
+          },
+          suggestOnFocus: true,
+          maxItems: 1
+        });
       });
     </script>
   </body>

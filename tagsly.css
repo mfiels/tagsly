@@ -52,7 +52,9 @@
   background: #3498db;
   padding: 5px;
   color: white;
+  cursor: pointer;
 }
-.tagsly ul.suggest li.active {
+.tagsly ul.suggest li.active,
+.tagsly ul.suggest li:hover {
   background: #1abc9c;
 }
