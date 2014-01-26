@@ -79,7 +79,7 @@
       });
 
       suggest.hide();
-      suggest.offset({ left: input.offset().left });
+      suggest.offset({ left: input.position().left });
 
       items++;
       if (maxItems && items >= maxItems) {
@@ -101,7 +101,7 @@
       backing.val(tags.join(','));
 
       suggest.hide();
-      suggest.offset({ left: input.offset().left });
+      suggest.offset({ left: input.position().left });
 
       items--;
       if (maxItems && items < maxItems) {
@@ -186,7 +186,7 @@
         var suggestion = $('<li/>', {
           'text': items[i]
         });
-        suggestion.click(function(e) {
+        suggestion.mousedown(function(e) {
           input.val($(this).text());
           split();
         });
