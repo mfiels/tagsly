@@ -16,7 +16,12 @@
     var maxItems;
     if (params && params['maxItems']) {
       maxItems = params['maxItems'];
-    } 
+    }
+
+    var maxItemSize;
+    if (params && params['maxItemSize']) {
+      maxItemSize = params['maxItemSize'];
+    }
 
     var placeholder = '';
     if (params && params['placeholder']) {
@@ -34,6 +39,9 @@
       'class': 'tag-textbox',
     });
     input.prop('placeholder', placeholder);
+    if (maxItemSize) {
+      input.prop('maxlength', maxItemSize);
+    }
 
     var suggest = $('<ul/>', {
       'class': 'suggest'
